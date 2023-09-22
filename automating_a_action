@@ -1,0 +1,57 @@
+You might want to add your own scheduled tasks to Windows 10 to perform maintenance. In this activity, you create a scheduled task that runs a Windows PowerShell script to delete temporary files that are no longer needed for an application.
+
+1. If necessary, start your computer and sign in.
+
+2. Right-click the **Start** button and then click **Windows PowerShell** on the shortcut menu.
+
+3. At the Windows PowerShell prompt, type `md C:\Scripts` and then press Enter. This creates a new folder that you will use to hold scripts.
+
+4. Type `md C:\AppTemp` and then press Enter. This is the folder that will hold the application temporary files that need to be deleted.
+
+5. Type `“unneeded log file” | Set-Content C:\AppTemp\LogFile.txt` and then press Enter. This creates LogFile.txt that will be deleted by the script.
+
+6. Type `Get-ChildItem C:\AppTemp` and press then Enter. Get-ChildItem is the Windows PowerShell equivalent of the dir command (actually there’s an alias so dir still works sshhh ). Verify that LogFile.txt is present as expected.
+
+7. Type `“Get-ChildItem C:\AppTemp | Remove-Item” | Set-Content C:\Scripts\CleanTemp.ps1` and then press Enter. This creates the script that will delete the temporary files. 
+
+8. Type `Get-Content C:\Scripts\CleanTemp.ps1` and then press Enter. Verify the contents of the script were typed correctly. If the script contents are incorrect, repeat Step 7.
+
+9. Right-click the **Start** button and then click **Computer Management** on the shortcut menu.
+
+10. In Computer Management, expand **Task Scheduler** and then click **Task Scheduler Library**.
+
+11. In the Actions pane, click **Create Basic Task**.
+
+12. In the Create Basic Task Wizard window, in the Name box, type `Clean Application Temp Files` and then click **Next**.
+
+13. On the Task Trigger screen, select **Weekly** and then click **Next**.
+
+14. On the Weekly screen, in the Start box, enter a time of **11:00:00 PM**.
+
+15. Select **Sunday** and then click **Next**.
+
+16. On the Action screen, if necessary, click select **Start a program** and then click **Next**.
+
+17. On the Start a Program screen, in the Program/script box, type `powershell.exe`.
+
+18. In the Add arguments box, type `-File C:\Scripts\CleanTemp.ps1` and then click **Next**.
+
+19. Click **Finish**.
+
+20. Read the security options for your new task. It will run only when you are signed in.
+
+21. Double-click **Clean Application Temp Files**.
+
+22. In the Clean Application Temp Files Properties (Local Computer) dialog box, click **Change User or Group**.
+
+23. In the Select User or Group dialog box, in the Enter the object name to select box, type `System`, click **Check Names**, and then click **OK**.
+
+24. In the Clean Application Temp Files Properties (Local Computer) dialog box, click **OK**.
+
+25. Right-click **Clean Application Temp Files** and then click **Run**.
+
+26. Click the **history** tab and verify that the task ran successfully. Note that successful execution of the task does not mean that it performed the action we wanted it to. In this context, it means only that powershell.exe was successfully started. Still cool, **Screenshot!**
+
+27. At the Windows PowerShell prompt, type `Get-ChildItem C:\AppTemp` and then press Enter. This command generates no output, because running the task removed the file in this folder. Bam!
+
+28. Close all open windows.
